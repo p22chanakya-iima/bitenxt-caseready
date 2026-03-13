@@ -2,6 +2,7 @@ export type CaseType = 'natural_crown' | 'implant_crown' | 'bridge'
 export type ZirconiaGrade = '3Y' | '4Y' | '5Y'
 export type RiskFlag = 'bruxism' | 'diabetes' | 'smoker' | 'bone_graft'
 export type StatusColor = 'GREEN' | 'YELLOW' | 'RED' | 'PENDING'
+export type ImplantSystem = 'Nobel Biocare' | 'Straumann' | 'Osstem' | 'BioHorizons' | 'Zimmer Biomet' | 'Other'
 
 export interface CaseInput {
   toothNumber: string
@@ -79,6 +80,62 @@ export interface AnalysisReport {
     taper: ParameterScore
     margin: ParameterScore
     occlusalClearance: ParameterScore
+  }
+  overall: StatusColor
+  actionText: {
+    summary: string
+    actions: ActionItem[]
+  }
+}
+
+// ── Implant analysis types ────────────────────────────────────────────────────
+
+export interface ImplantCaseInput {
+  toothNumber: string
+  implantSystem: ImplantSystem | string
+  patientRisk: string[]
+  dentistName: string
+  clinicName: string
+}
+
+export interface ImplantParameterScore {
+  status: StatusColor
+  note: string
+}
+
+export interface ImplantReport {
+  caseId: string
+  toothNumber: string
+  implantSystem: string
+  patientRisk: string[]
+  dentistName: string
+  clinicName: string
+  timestamp: string
+  scanInfo: {
+    vertexCount: number
+    faceCount: number
+    dimensionsMm: { x: number; y: number; z: number }
+  }
+  measurements: {
+    scanQuality: { qualityScore: number; issues: string[]; usable: boolean; vertexCount: number }
+    scanBody: {
+      detected: boolean
+      angulationDeg: number | null
+      heightAboveRidgeMm: number | null
+      protrustionVertexCount: number
+      error?: string
+    }
+    angulation: { angulationDeg: number | null; emergenceAngleDeg: number | null }
+    mesiodistalSpace: { mesialMm: number | null; distalMm: number | null }
+    verticalSpace: { measurable: boolean; platformToOpposingMm?: number }
+  }
+  scores: {
+    scanQuality: ImplantParameterScore
+    scanBodyDetection: ImplantParameterScore
+    implantAngulation: ImplantParameterScore
+    emergenceAngle: ImplantParameterScore
+    mesiodistalSpace: ImplantParameterScore
+    verticalSpace: ImplantParameterScore
   }
   overall: StatusColor
   actionText: {

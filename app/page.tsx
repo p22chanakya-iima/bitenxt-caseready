@@ -65,13 +65,13 @@ export default function HomePage() {
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-10">
             <Link
-              href="/analyse"
+              href="/analyse/prep"
               className="px-7 py-3.5 bg-accent text-white font-semibold rounded-lg hover:bg-accent/90 transition-colors text-base"
             >
               Upload &amp; Analyse Scan →
             </Link>
             <Link
-              href="/report/demo"
+              href="/report/demo-prep"
               className="px-7 py-3.5 border border-accent text-accent font-semibold rounded-lg hover:bg-accent/10 transition-colors text-base"
             >
               View Sample Report →
@@ -81,6 +81,64 @@ export default function HomePage() {
           <p className="text-sm text-cream-muted/60">
             Used by dental labs in Hyderabad · Built on peer-reviewed parameters
           </p>
+        </div>
+      </section>
+
+      {/* TWO PRODUCT PATHS */}
+      <section className="py-16 px-6 border-t border-border-col">
+        <div className="max-w-5xl mx-auto">
+          <p className="text-center text-xs font-semibold uppercase tracking-widest text-cream-muted mb-10">
+            Choose your analysis type
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Crown Prep Card */}
+            <Link
+              href="/analyse/prep"
+              className="group block bg-navy-light border border-border-col hover:border-accent/60 rounded-xl p-8 transition-all hover:bg-navy-elevated"
+            >
+              <div className="w-12 h-12 bg-accent/20 border border-accent/30 rounded-xl flex items-center justify-center mb-5">
+                <span className="text-accent text-xl">⬡</span>
+              </div>
+              <h3 className="text-lg font-semibold text-cream mb-2 group-hover:text-accent transition-colors">
+                Crown Prep Check
+              </h3>
+              <p className="text-cream-muted text-sm leading-relaxed mb-4">
+                Upload an isolated tooth preparation STL. Detects undercuts, taper angle, and margin regularity before milling.
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {['Undercut detection', 'Taper angle', 'Margin quality', 'Scan integrity'].map(t => (
+                  <span key={t} className="text-xs px-2 py-1 bg-navy rounded-full border border-border-col text-cream-muted">{t}</span>
+                ))}
+              </div>
+              <div className="mt-6 text-accent text-sm font-medium group-hover:translate-x-1 transition-transform inline-block">
+                Start prep analysis →
+              </div>
+            </Link>
+
+            {/* Implant Scan Card */}
+            <Link
+              href="/analyse/implant"
+              className="group block bg-navy-light border border-border-col hover:border-accent/60 rounded-xl p-8 transition-all hover:bg-navy-elevated"
+            >
+              <div className="w-12 h-12 bg-accent/20 border border-accent/30 rounded-xl flex items-center justify-center mb-5">
+                <span className="text-accent text-xl">⟳</span>
+              </div>
+              <h3 className="text-lg font-semibold text-cream mb-2 group-hover:text-accent transition-colors">
+                Implant Scan Check
+              </h3>
+              <p className="text-cream-muted text-sm leading-relaxed mb-4">
+                Upload a full arch IOS scan with scan body. Detects implant angulation, emergence angle, and crown space before design.
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {['Scan body detection', 'Implant angulation', 'Emergence angle', 'Crown space'].map(t => (
+                  <span key={t} className="text-xs px-2 py-1 bg-navy rounded-full border border-border-col text-cream-muted">{t}</span>
+                ))}
+              </div>
+              <div className="mt-6 text-accent text-sm font-medium group-hover:translate-x-1 transition-transform inline-block">
+                Start implant analysis →
+              </div>
+            </Link>
+          </div>
         </div>
       </section>
 

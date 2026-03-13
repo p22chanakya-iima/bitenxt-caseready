@@ -140,7 +140,7 @@ export default function ReportPage() {
   const [notFound, setNotFound] = useState(false)
 
   useEffect(() => {
-    if (caseId === 'demo') {
+    if (caseId === 'demo' || caseId === 'demo-prep') {
       setReport(DEMO_REPORT)
       return
     }
@@ -164,7 +164,7 @@ export default function ReportPage() {
           <p className="text-cream-muted text-sm mb-6">
             Case ID: {caseId} was not found in storage.
           </p>
-          <Link href="/analyse" className="text-accent hover:underline text-sm">
+          <Link href="/analyse/prep" className="text-accent hover:underline text-sm">
             ← Start a New Analysis
           </Link>
         </div>
@@ -226,7 +226,7 @@ export default function ReportPage() {
           <span className="text-cream font-normal text-xl">CaseReady™</span>
         </div>
         <Link
-          href="/analyse"
+          href="/analyse/prep"
           className="text-sm text-cream-muted hover:text-cream transition-colors flex items-center gap-1"
         >
           ← New Analysis
@@ -427,7 +427,7 @@ export default function ReportPage() {
         {/* BUTTONS */}
         <div className="flex gap-4 no-print pb-10">
           <Link
-            href="/analyse"
+            href="/analyse/prep"
             className="px-6 py-3 border border-border-col text-cream-muted rounded-lg hover:text-cream hover:border-accent transition-colors text-sm font-medium"
           >
             ← New Analysis
