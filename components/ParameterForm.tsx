@@ -26,10 +26,10 @@ const toothGroups = [
   },
 ]
 
-const caseTypes: { value: CaseType; label: string }[] = [
+const caseTypes: { value: CaseType; label: string; badge?: string }[] = [
   { value: 'natural_crown', label: 'Natural Tooth Crown' },
-  { value: 'implant_crown', label: 'Implant Crown' },
-  { value: 'bridge', label: 'Bridge' },
+  { value: 'implant_crown', label: 'Implant Crown', badge: 'Phase 2' },
+  { value: 'bridge', label: 'Bridge', badge: 'Phase 2' },
 ]
 
 const zirconiaGrades: {
@@ -126,13 +126,18 @@ export default function ParameterForm({ value, onChange }: ParameterFormProps) {
               key={ct.value}
               type="button"
               onClick={() => set({ caseType: ct.value })}
-              className={`text-left px-4 py-3 rounded-lg border text-sm font-medium transition-all ${
+              className={`text-left px-4 py-3 rounded-lg border text-sm font-medium transition-all flex items-center justify-between ${
                 value.caseType === ct.value
                   ? 'border-accent bg-navy-elevated text-cream'
                   : 'border-border-col bg-navy text-cream-muted hover:border-accent/50 hover:text-cream'
               }`}
             >
-              {ct.label}
+              <span>{ct.label}</span>
+              {ct.badge && (
+                <span className="text-xs px-2 py-0.5 rounded-full bg-navy-elevated border border-border-col text-cream-muted/70 font-normal">
+                  {ct.badge}
+                </span>
+              )}
             </button>
           ))}
         </div>

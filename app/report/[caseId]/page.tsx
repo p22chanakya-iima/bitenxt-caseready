@@ -7,46 +7,46 @@ import { AnalysisReport, StatusColor } from '@/lib/types'
 
 const DEMO_REPORT: AnalysisReport = {
   caseId: 'BN-2026-DEMO',
-  toothNumber: '36',
-  caseType: 'implant_crown',
-  zirconiaGrade: '3Y',
-  patientRisk: ['bruxism'],
+  toothNumber: '14',
+  caseType: 'natural_crown',
+  zirconiaGrade: '4Y',
+  patientRisk: [],
   dentistName: 'Dr. Ramesh Kumar',
   clinicName: 'Radiance Dental, Hyderabad',
   timestamp: '2026-03-13T10:00:00.000Z',
   scanInfo: {
-    vertexCount: 45231,
-    faceCount: 90462,
-    dimensionsMm: { x: 8.2, y: 9.1, z: 6.4 },
+    vertexCount: 38912,
+    faceCount: 77824,
+    dimensionsMm: { x: 9.1, y: 8.8, z: 5.5 },
   },
   measurements: {
     scanQuality: {
-      qualityScore: 87,
+      qualityScore: 85,
       isWatertight: true,
       isWindingConsistent: true,
-      vertexCount: 45231,
-      faceCount: 90462,
-      degenerateFaceRatio: 0.003,
+      vertexCount: 38912,
+      faceCount: 77824,
+      degenerateFaceRatio: 0.002,
       issues: [],
       usable: true,
     },
     undercut: {
       undercutDetected: true,
       severity: 'moderate',
-      undercutFaceRatio: 0.073,
-      multiHitRatio: 0.124,
+      undercutFaceRatio: 0.081,
+      multiHitRatio: 0.138,
     },
     taper: {
-      meanTaperDeg: 3.1,
-      stdTaperDeg: 1.2,
-      distribution: { under4: 58.3, ideal4to8: 38.1, over8: 3.6 },
-      axialFaceCount: 12400,
+      meanTaperDeg: 2.1,
+      stdTaperDeg: 0.9,
+      distribution: { under4: 74.2, ideal4to8: 23.1, over8: 2.7 },
+      axialFaceCount: 9840,
     },
     margin: {
       marginDetected: true,
-      marginRegularityScore: 0.71,
-      marginZVariationMm: 0.18,
-      marginVertexCount: 892,
+      marginRegularityScore: 0.74,
+      marginZVariationMm: 0.14,
+      marginVertexCount: 712,
     },
     occlusalClearance: {
       clearanceMeasurable: false,
@@ -55,19 +55,19 @@ const DEMO_REPORT: AnalysisReport = {
   scores: {
     scanQuality: {
       status: 'GREEN',
-      note: 'Mesh integrity verified. 45,231 vertices, watertight.',
+      note: 'Mesh integrity verified. 38,912 vertices, watertight.',
     },
     undercut: {
       status: 'RED',
-      note: 'Moderate undercut detected. Multi-hit ratio: 12.4%. Crown cannot seat.',
+      note: 'Moderate undercut on buccal axial wall. Multi-hit ratio 13.8%. Crown cannot seat.',
     },
     taper: {
       status: 'RED',
-      note: '58.3% of axial faces below 4° minimum. Mean taper 3.1°.',
+      note: '74.2% of axial faces below 4° minimum. Mean taper 2.1° — near-parallel walls.',
     },
     margin: {
       status: 'GREEN',
-      note: 'Regularity score 0.71. Margin line detected cleanly.',
+      note: 'Regularity score 0.74. Chamfer margin detected cleanly.',
     },
     occlusalClearance: {
       status: 'PENDING',
@@ -76,17 +76,17 @@ const DEMO_REPORT: AnalysisReport = {
   },
   overall: 'RED',
   actionText: {
-    summary: 'Two critical issues detected. Rescan required before milling.',
+    summary: 'Two critical issues detected. Re-preparation required before milling.',
     actions: [
       {
         severity: 'RED',
         parameter: 'Undercut Detection',
-        text: 'A moderate undercut was detected on the axial wall (multi-hit ratio 12.4%). The crown physically cannot be seated onto this preparation. Re-preparation is required — focus on the gingival third of the axial walls. We will prioritise your rescan with same-day turnaround.',
+        text: 'A moderate undercut was detected on the buccal axial wall (multi-hit ratio 13.8%). The crown cannot be physically seated onto this preparation. Re-preparation is required — focus on eliminating inward geometry in the gingival third of the buccal wall. BiteNxt will prioritise your rescan with same-day turnaround.',
       },
       {
         severity: 'RED',
         parameter: 'Taper Angle',
-        text: '58.3% of axial wall faces fall below the 4° minimum taper angle (mean: 3.1°). Parallel or near-parallel walls will bind the crown during seating. Additional axial reduction with appropriate taper is required. Target 4–8° convergence angle.',
+        text: '74.2% of axial wall faces fall below the 4° minimum taper angle (mean: 2.1°). Near-parallel walls will bind the crown during seating and prevent full seating. Additional axial reduction with appropriate divergence is required. Target 4–8° convergence angle on all axial walls.',
       },
     ],
   },

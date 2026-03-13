@@ -41,36 +41,36 @@ interface DemoCase {
 
 const DEMO_CASES: DemoCase[] = [
   {
-    label: 'Demo: Tooth 36 · Implant · RED',
-    path: '/stl/case_a_tooth36_implant.stl',
+    label: 'Demo: Tooth 14 · Natural · RED',
+    path: '/stl/case_a_tooth14_natural.stl',
     form: {
-      toothNumber: '36',
-      caseType: 'implant_crown',
-      zirconiaGrade: '3Y',
-      patientRisk: ['bruxism'],
+      toothNumber: '14',
+      caseType: 'natural_crown',
+      zirconiaGrade: '4Y',
+      patientRisk: [],
       dentistName: 'Dr. Ramesh Kumar',
       clinicName: 'Radiance Dental, Hyderabad',
     },
   },
   {
-    label: 'Demo: Tooth 14 · Natural · GREEN',
-    path: '/stl/case_b_tooth14_natural.stl',
+    label: 'Demo: Tooth 21 · Anterior · GREEN',
+    path: '/stl/case_b_tooth21_natural.stl',
     form: {
-      toothNumber: '14',
+      toothNumber: '21',
       caseType: 'natural_crown',
-      zirconiaGrade: '4Y',
+      zirconiaGrade: '5Y',
       patientRisk: [],
       dentistName: 'Dr. Priya Sharma',
       clinicName: 'SmilePlus Dental, Pune',
     },
   },
   {
-    label: 'Demo: Tooth 21 · Anterior · YELLOW',
-    path: '/stl/case_c_tooth21_anterior.stl',
+    label: 'Demo: Tooth 36 · Molar · YELLOW',
+    path: '/stl/case_c_tooth36_natural.stl',
     form: {
-      toothNumber: '21',
+      toothNumber: '36',
       caseType: 'natural_crown',
-      zirconiaGrade: '5Y',
+      zirconiaGrade: '3Y',
       patientRisk: [],
       dentistName: 'Dr. Anita Reddy',
       clinicName: 'Dental Care Centre, Chennai',
@@ -90,6 +90,12 @@ export default function AnalysePage() {
   const prepInputRef = useRef<HTMLInputElement>(null)
   const opposingInputRef = useRef<HTMLInputElement>(null)
   const processingStartRef = useRef<number>(0)
+
+  const [showImplantNotice, setShowImplantNotice] = useState(false)
+
+  useEffect(() => {
+    setShowImplantNotice(formData.caseType === 'implant_crown')
+  }, [formData.caseType])
 
   const canSubmit =
     prepFile !== null &&
@@ -431,21 +437,43 @@ export default function AnalysePage() {
           </div>
 
           {/* Submit button */}
+          {showImplantNotice && (
+            <div className="px-6 pb-0 pt-0">
+              <div className="bg-accent/10 border border-accent/30 rounded-xl p-4 mb-4">
+                <div className="flex items-start gap-3">
+                  <span className="text-accent text-lg mt-0.5">⚙</span>
+                  <div>
+                    <div className="text-accent text-sm font-semibold mb-1">
+                      Implant Case — Scan Body Detection Module
+                    </div>
+                    <p className="text-cream-muted text-xs leading-relaxed">
+                      Implant crown scans contain a <strong className="text-cream">scan body</strong> embedded in a full arch STL — not a prepared tooth stump. Analysis requires detecting the scan body geometry, matching it against the implant manufacturer library (Nobel, Straumann, Osstem), and measuring emergence angle and platform-to-occlusal clearance.
+                    </p>
+                    <p className="text-cream-muted text-xs leading-relaxed mt-2">
+                      This module is in development for <strong className="text-cream">Phase 2</strong>. For now, switch to <strong className="text-cream">Natural Tooth Crown</strong> to run the prep analysis engine.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
           <div className="p-6 border-t border-border-col flex-shrink-0">
             <button
               onClick={handleAnalyse}
-              disabled={!canSubmit}
+              disabled={!canSubmit || showImplantNotice}
               className={`w-full py-4 rounded-xl font-semibold text-base transition-all ${
-                canSubmit
+                canSubmit && !showImplantNotice
                   ? 'bg-accent text-white hover:bg-accent/90 cursor-pointer'
                   : 'bg-navy-elevated text-cream-muted cursor-not-allowed'
               }`}
             >
               Run Scan Check →
             </button>
-            {!canSubmit && (
+            {(!canSubmit || showImplantNotice) && (
               <p className="text-xs text-cream-muted text-center mt-2">
-                Select tooth number, case type, and zirconia grade to continue
+                {showImplantNotice
+                  ? 'Switch to Natural Tooth Crown to run analysis'
+                  : 'Select tooth number, case type, and zirconia grade to continue'}
               </p>
             )}
           </div>
