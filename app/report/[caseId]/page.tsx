@@ -13,7 +13,7 @@ const DEMO_REPORT: AnalysisReport = {
   patientRisk: ['bruxism'],
   dentistName: 'Dr. Ramesh Kumar',
   clinicName: 'Radiance Dental, Hyderabad',
-  timestamp: new Date().toISOString(),
+  timestamp: '2026-03-13T10:00:00.000Z',
   scanInfo: {
     vertexCount: 45231,
     faceCount: 90462,
