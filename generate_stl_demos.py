@@ -114,51 +114,62 @@ def create_tooth_prep(
 output_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'public', 'stl')
 os.makedirs(output_dir, exist_ok=True)
 
-# -- CASE A: Tooth 14 Natural Crown -> RED -----------------------------------------------
-# Upper premolar. Small, 2-cusp tooth. Undercut on buccal + near-parallel walls.
+# Taper geometry: top_radius = base_radius - tan(target_degrees) * height
+# This ensures face normals on axial walls measure exactly the target angle.
+# Dentistry convention: taper angle = half-angle of each axial wall from insertion axis.
+# Ideal: 4-8 degrees per wall. Scoring: <2 or >12 = RED, 2-12 = YELLOW, 4-8 = GREEN.
+
+# -- CASE A: Tooth 14 Natural Crown -> RED -------------------------------------------
+# Upper premolar. Near-parallel walls (2 deg taper) + buccal undercut.
+# top_radius = 4.5 - tan(2deg)*5.5 = 4.5 - 0.0349*5.5 = 4.308
 print("Generating Case A: Tooth 14 Natural Crown (RED)...")
 mesh_a = create_tooth_prep(
     base_radius=4.5,
-    top_radius=4.1,    # very slight taper -> ~2 degrees -> RED
+    top_radius=4.308,   # tan(2deg)*5.5 = 0.192mm reduction -> 2deg taper -> RED
     height=5.5,
-    n_sides=64,
-    chamfer_depth=0.5,
+    n_sides=80,
+    n_layers=80,
+    chamfer_depth=0.25,
     add_undercut=True,
-    undercut_angle=0.35,
-    undercut_sector=0.35,
-    taper_noise=0.02,
+    undercut_angle=0.75,  # aggressive undercut to ensure detection above threshold
+    undercut_sector=0.40,
+    taper_noise=0.008,
 )
 path_a = os.path.join(output_dir, 'case_a_tooth14_natural.stl')
 mesh_a.export(path_a)
 print(f"  Done: {path_a}  ({len(mesh_a.vertices)} verts, {len(mesh_a.faces)} faces)")
 
-# -- CASE B: Tooth 21 Natural Crown -> GREEN -----------------------------------------------
-# Upper central incisor. Ideal prep: 6 degree taper, clean margin, no undercuts.
+# -- CASE B: Tooth 21 Natural Crown -> GREEN -----------------------------------------
+# Upper central incisor. Ideal 6 deg taper, no undercuts, smooth margin.
+# top_radius = 4.0 - tan(6deg)*5.0 = 4.0 - 0.1051*5.0 = 3.474
 print("Generating Case B: Tooth 21 Natural Crown (GREEN)...")
 mesh_b = create_tooth_prep(
     base_radius=4.0,
-    top_radius=2.7,    # 6 degree taper -> GREEN
+    top_radius=3.474,   # tan(6deg)*5.0 = 0.526mm reduction -> 6deg taper -> GREEN
     height=5.0,
-    n_sides=64,
-    chamfer_depth=0.35,
+    n_sides=80,
+    n_layers=80,
+    chamfer_depth=0.20,
     add_undercut=False,
-    taper_noise=0.008,  # very smooth -- ideal scan
+    taper_noise=0.004,  # minimal noise - ideal clean scan
 )
 path_b = os.path.join(output_dir, 'case_b_tooth21_natural.stl')
 mesh_b.export(path_b)
 print(f"  Done: {path_b}  ({len(mesh_b.vertices)} verts, {len(mesh_b.faces)} faces)")
 
-# -- CASE C: Tooth 36 Natural Crown -> YELLOW -----------------------------------------------
-# Lower molar. Over-tapered (10 degrees) -- common mistake on posterior teeth.
+# -- CASE C: Tooth 36 Natural Crown -> YELLOW ----------------------------------------
+# Lower molar. Over-tapered (10 deg) - common error on posterior teeth.
+# top_radius = 5.5 - tan(10deg)*6.0 = 5.5 - 0.1763*6.0 = 4.442
 print("Generating Case C: Tooth 36 Natural Crown (YELLOW)...")
 mesh_c = create_tooth_prep(
     base_radius=5.5,
-    top_radius=3.0,    # 10 degree taper -> YELLOW (over 8 degree ideal)
+    top_radius=4.442,   # tan(10deg)*6.0 = 1.058mm reduction -> 10deg taper -> YELLOW
     height=6.0,
-    n_sides=64,
-    chamfer_depth=0.6,
+    n_sides=80,
+    n_layers=80,
+    chamfer_depth=0.25,
     add_undercut=False,
-    taper_noise=0.025,  # slightly rougher margin
+    taper_noise=0.006,
 )
 path_c = os.path.join(output_dir, 'case_c_tooth36_natural.stl')
 mesh_c.export(path_c)

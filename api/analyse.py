@@ -74,9 +74,12 @@ def detect_undercuts(mesh):
     height = zmax - zmin
     zmid = zmin + height * 0.5
 
-    lower_faces = face_centers[:, 2] < zmid
+    # Exclude bottom 15% (chamfer/margin zone) — chamfer geometry creates upward-pointing
+    # faces that are clinically intentional, not undercuts. True undercuts are axial wall
+    # problems in the middle third of the preparation, not at the margin.
+    axial_lower = (face_centers[:, 2] > (zmin + height * 0.15)) & (face_centers[:, 2] < zmid)
     upward_normals = face_normals[:, 2] > 0.3
-    undercut_faces = lower_faces & upward_normals
+    undercut_faces = axial_lower & upward_normals
     undercut_face_ratio = float(np.sum(undercut_faces)) / max(len(face_normals), 1)
 
     x_range = np.linspace(bounds[0][0], bounds[1][0], 15)
@@ -106,11 +109,11 @@ def detect_undercuts(mesh):
     except Exception:
         multi_hit_ratio = 0.0
 
-    undercut_detected = (undercut_face_ratio > 0.05) or (multi_hit_ratio > 0.08)
+    undercut_detected = (undercut_face_ratio > 0.03) or (multi_hit_ratio > 0.08)
 
     if multi_hit_ratio > 0.20:
         severity = "severe"
-    elif multi_hit_ratio > 0.08 or undercut_face_ratio > 0.05:
+    elif multi_hit_ratio > 0.08 or undercut_face_ratio > 0.03:
         severity = "moderate"
     else:
         severity = "none"
@@ -304,7 +307,10 @@ def score_all(measurements, tooth_number, case_type, zirconia_grade, patient_ris
     # Margin
     mg = measurements["margin"]
     if not mg.get("margin_detected"):
-        scores["margin"] = {"status": "YELLOW", "note": "Margin line not clearly detected. Scan may have artifacts in gingival zone."}
+        # PENDING rather than YELLOW — curvature detection requires sufficient surface
+        # complexity. If margin cannot be detected, flag for human review rather than
+        # failing the case. Clinical scans with clear chamfer/shoulder will score here.
+        scores["margin"] = {"status": "PENDING", "note": "Margin line detection requires higher surface curvature contrast. Please have designer verify margin manually."}
     elif mg["margin_regularity_score"] > 0.70:
         scores["margin"] = {"status": "GREEN", "note": f"Regularity score {mg['margin_regularity_score']:.2f}. Margin line detected cleanly."}
     elif mg["margin_regularity_score"] > 0.50:
